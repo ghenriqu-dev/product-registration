@@ -4,6 +4,7 @@ class Produto{
     constructor(){
         this.id = 1
         this.arrayProducts = []
+        this.edit = null
     }
 
 //Salvar um produto
@@ -11,15 +12,31 @@ class Produto{
         let product = this.readData()
 
         if (this.checkFields(product)){
-            this.add(product)
-            this.cancel()
+            if (this.edit == null){
+                this.add(product)
+                this.cancel()
+            }else{
+                this.refresh(this.edit, product)
+            }
+            
         }
+        this.makeTable()
+    }
 
+    refresh(id, product){
+        for (let item in this.arrayProducts){
+            if (this.arrayProducts[item].id == id){
+                this.arrayProducts[item].name = product.name
+                this.arrayProducts[item].value = product.value
+            }
+        }
+        document.getElementById('btn1').innerText = 'Salvar'
         this.makeTable()
     }
 
 //Adicionar produto a lista de produtos
     add(product){
+        product.value = parseFloat(product.value)
         this.arrayProducts.push(product)
         this.id++
     }
@@ -46,6 +63,7 @@ class Produto{
 
             let imgEdit = document.createElement('img')
             imgEdit.src = 'img/escrever.png'
+            imgEdit.setAttribute('onclick', 'produto.checkEdit(' + JSON.stringify(this.arrayProducts[item]) + ')')
 
             let imgDelete = document.createElement('img')
             imgDelete.src = 'img/excluir.png'
@@ -54,6 +72,16 @@ class Produto{
             td_actions.appendChild(imgEdit)
             td_actions.appendChild(imgDelete)
         }
+    }
+
+//Prepara o produto para edição
+    checkEdit(data){
+        this.edit = data.id
+
+        document.getElementById('produto').value = data.name
+        document.getElementById('valor').value = data.value
+
+        document.getElementById('btn1').innerText = 'Atualizar'
     }
 
 //Deleta produto da lista e a linha do html
@@ -74,6 +102,8 @@ class Produto{
     cancel(){
         document.getElementById('produto').value = ''
         document.getElementById('valor').value = ''
+        document.getElementById('btn1').innerText = 'Salvar'
+        this.edit = null
     }
 
 //Lê as informações contidas nos campos
