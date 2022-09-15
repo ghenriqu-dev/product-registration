@@ -1,3 +1,4 @@
+//Criação da classe do produto
 class Produto{
 
     constructor(){
@@ -5,6 +6,7 @@ class Produto{
         this.arrayProducts = []
     }
 
+//Salvar um produto
     save(){
         let product = this.readData()
 
@@ -16,11 +18,13 @@ class Produto{
         this.makeTable()
     }
 
+//Adicionar produto a lista de produtos
     add(product){
         this.arrayProducts.push(product)
         this.id++
     }
 
+//Indexar a tabela de acordo com a lista de produtos
     makeTable(){
         let tbody = document.getElementById('tbody')
         tbody.innerText = ''
@@ -52,23 +56,27 @@ class Produto{
         }
     }
 
+//Deleta produto da lista e a linha do html
     delete(id){
-        let tbody = document.getElementById('tbody')
+        if(confirm('Deseja realimente deletar o produtos com o ID ' + id)){
+            let tbody = document.getElementById('tbody')
 
-        for(let item in this.arrayProducts){
-            if (id == this.arrayProducts[item].id){
-                this.arrayProducts.splice(item, 1)
-                tbody.deleteRow(item)
-            }
+            for(let item in this.arrayProducts){
+                if (id == this.arrayProducts[item].id){
+                    this.arrayProducts.splice(item, 1)
+                    tbody.deleteRow(item)
+                }
+            }   
         }
-        //this.makeTable()
     }
 
+//Setar para vazio os campos
     cancel(){
         document.getElementById('produto').value = ''
         document.getElementById('valor').value = ''
     }
 
+//Lê as informações contidas nos campos
     readData(){
         let product = {}
 
@@ -79,6 +87,7 @@ class Produto{
         return product
     }
 
+//Verifica se todos os campos estão preenchidos
     checkFields(product){
         let msg = ''
         
